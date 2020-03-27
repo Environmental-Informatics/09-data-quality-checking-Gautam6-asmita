@@ -23,21 +23,15 @@ def ReadData( fileName ):
     colNames = ['Date','Precip','Max Temp', 'Min Temp','Wind Speed']
 
     # open and read the file
-    global DataDF
     DataDF = pd.read_csv("DataQualityChecking.txt",header=None, names=colNames,  
                          delimiter=r"\s+",parse_dates=[0])
     DataDF = DataDF.set_index('Date')
 
-    ##Reopening the datafile for the raw data to compare 
-    global RawData
-    RawData = pd.read_csv("DataQualityChecking.txt",header=None, names=colNames,  
-                         delimiter=r"\s+",parse_dates=[0])
-    RawData = RawData.set_index('Date')
+   
     # define and initialize the missing data dictionary
-    global ReplacedValuesDF
     ReplacedValuesDF = pd.DataFrame(0, index=["1. No Data"], columns=colNames[1:])
      
-    return( DataDF, ReplacedValuesDF,RawData)
+    return( DataDF, ReplacedValuesDF)
  
 def Check01_RemoveNoDataValues( DataDF, ReplacedValuesDF ):
     """This check replaces the defined No Data value with the NumPy NaN value
@@ -94,7 +88,7 @@ def Check04_TmaxTminRange( DataDF, ReplacedValuesDF ):
 if __name__ == '__main__':
     
     fileName = "DataQualityChecking.txt"
-    DataDF, ReplacedValuesDF, Rawdata = ReadData(fileName)
+    DataDF, ReplacedValuesDF = ReadData(fileName)
     
     print("\nRaw data.....\n", DataDF.describe())
     
@@ -114,7 +108,11 @@ if __name__ == '__main__':
     
     
     ###Creating comparision plots
-    
+     ##Reopening the datafile for the raw data to compare
+    colNames = ['Date','Precip','Max Temp', 'Min Temp','Wind Speed']
+    RawData = pd.read_csv("DataQualityChecking.txt",header=None, names=colNames,  
+                         delimiter=r"\s+",parse_dates=[0])
+    RawData = RawData.set_index('Date')
     
     import matplotlib.pyplot as plt #Importing the required module
     """Precipitation correction comparision figure"""
