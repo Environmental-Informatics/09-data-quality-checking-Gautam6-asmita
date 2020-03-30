@@ -79,7 +79,7 @@ def Check04_TmaxTminRange( DataDF, ReplacedValuesDF ):
     that has been checked, and with counts of how many days of data have been 
     removed through the process."""
 
-    DataDF.loc[(DataDF['Max Temp']-DataDF['Min Temp']>25),['Min Temp','Max Temp']]=np.nan  #Replacing the datapoint of max and min temp with nan
+    DataDF.loc[(DataDF['Max Temp']-DataDF['Min Temp']>25),['Max Temp','Min Temp']]=np.nan  #Replacing the datapoint of max and min temp with nan
     ReplacedValuesDF.loc['4. Range', :]=DataDF.isna().sum()-ReplacedValuesDF.sum()
     # adding the count as a column in the replacedvaluesdf with a row index as 4.Rangefail
     return( DataDF, ReplacedValuesDF )
