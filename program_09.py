@@ -64,11 +64,11 @@ def Check03_TmaxTminSwapped( DataDF, ReplacedValuesDF ):
     minimum air temperature, and swaps the values when found.  The function 
     returns modified DataFrames with data that has been fixed, and with counts 
     of how many times the fix has been applied."""
-    count= len(DataDF.loc[DataDF['Min Temp']>DataDF['Max Temp']]) #Counting the data points which has maximum temp greater than minimum temp
+    
     DataDF.loc[DataDF['Min Temp']>DataDF['Max Temp'],['Min Temp','Max Temp']]= np.nan 
     #Replacing the min and max temp datapoints where maximum temp is lower than minimum temp 
     
-    ReplacedValuesDF.loc['3. Swapped',:]=[0,count,count,0] 
+    ReplacedValuesDF.loc['3. Swapped',:]=DataDF.isna().sum()- ReplacedValuesDF.sum()
     # adding the count as a column in the replacedvaluesdf with a row index as 3.Swapped
     return( DataDF, ReplacedValuesDF )
     
@@ -78,11 +78,10 @@ def Check04_TmaxTminRange( DataDF, ReplacedValuesDF ):
     with NaNs when found.  The function returns modified DataFrames with data 
     that has been checked, and with counts of how many days of data have been 
     removed through the process."""
-    
-    count= len(DataDF.loc[(DataDF['Max Temp']-DataDF['Min Temp']>25)])
-    DataDF.loc[(DataDF['Max Temp']-DataDF['Min Temp']>25),['Min Temp','Max Temp']]=np.nan
-    ReplacedValuesDF.loc['4. Range', :]=[0,count,count,0]
- 
+
+    DataDF.loc[(DataDF['Max Temp']-DataDF['Min Temp']>25),['Min Temp','Max Temp']]=np.nan  #Replacing the datapoint of max and min temp with nan
+    ReplacedValuesDF.loc['4. Range', :]=DataDF.isna().sum()-ReplacedValuesDF.sum()
+    # adding the count as a column in the replacedvaluesdf with a row index as 4.Rangefail
     return( DataDF, ReplacedValuesDF )
     
 if __name__ == '__main__':
